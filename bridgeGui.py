@@ -13,10 +13,9 @@ import sys
 import subprocess
 import re
 
-
-aboutText = """<p>Sorry, there is no information about this program. It is
-running on version %(wxpy)s of <b>wxPython</b> and %(python)s of <b>Python</b>.
-See <a href="http://wiki.wxpython.org">wxPython Wiki</a></p>""" 
+aboutText = """<p>This is a small programm to easily create bridge interfaces for VM's
+    Use with caution. This program needs administrator access. <a href="https://github.com/Spuk1/bridgeGui">Source</a>
+</p>""" 
 
 class HtmlWindow(wx.html.HtmlWindow):
     def __init__(self, parent, id, size=(600,400)):
@@ -30,7 +29,7 @@ class HtmlWindow(wx.html.HtmlWindow):
 class AboutBox(wx.Dialog):
     def __init__(self):
         wx.Dialog.__init__(self, None, -1, "About <<BridgeGui>>",
-            style=wx.DEFAULT_DIALOG_STYLE|wx.THICK_FRAME|wx.RESIZE_BORDER|
+            style=wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER|
                 wx.TAB_TRAVERSAL)
         hwin = HtmlWindow(self, -1, size=(400,200))
         vers = {}
