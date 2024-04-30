@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/pkexec /usr/bin/python
 # -*- coding: <<encoding>> -*-
 #-------------------------------------------------------------------------------
 #   BridgeGui
@@ -12,6 +12,8 @@ import wx, wx.html
 import sys
 import subprocess
 import re
+import pathlib
+import os, grp, pwd
 
 aboutText = """<p>This is a small programm to easily create bridge interfaces for VM's
     Use with caution. This program needs administrator access. <a href="https://github.com/Spuk1/bridgeGui">Source</a>
@@ -45,7 +47,14 @@ class AboutBox(wx.Dialog):
 
 class Frame(wx.Frame):
     def __init__(self, title):
+        
         wx.Frame.__init__(self, None, title=title, pos=(150,150), size=(800,400))
+        groups = [g.gr_name for g in grp.getgrall() if os.getlogin() in g.gr_mem]
+        gid = pwd.getpwnam(os.getlogin()).pw_gid
+        groups.append(grp.getgrgid(gid).gr_name)
+        if not 'netAdmin' in groups:
+            cmd = f"pkexec python {pathlib.Path().resolve()}/elevate.py"
+            subprocess.getoutput(cmd)
         self.Bind(wx.EVT_CLOSE, self.OnClose)
         self.splitter = wx.SplitterWindow(self)
         self.splitter.SetSize(self.GetSize())
