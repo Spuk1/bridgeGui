@@ -1,4 +1,4 @@
-#!/usr/bin/pkexec /usr/bin/python
+#!/usr/bin/python
 # -*- coding: <<encoding>> -*-
 #-------------------------------------------------------------------------------
 #   BridgeGui
@@ -171,7 +171,7 @@ class Frame(wx.Frame):
         if proc[0] == 0:
             self.log("Bridge set to master")
         else:
-            self.log(proc[1])
+            self.log(proc[1] + " Wifi interfaces cannot be bridged!")
             return
         proc = subprocess.getstatusoutput(f"sudo ip addr flush {self.selected[0]}")
         if proc[0] == 0:
