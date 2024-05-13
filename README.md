@@ -9,7 +9,7 @@ This is a simple Gui to create bridge interfaces in order to bridge your network
 Workaround for wireless interfaces as they do not allow to be enslaved to a bridge.
 
 
-**Dependencies**7
+**Dependencies**
 
 This programm needs wxpython to run:
 
