@@ -9,6 +9,18 @@ This is a simple Gui to create bridge interfaces in order to bridge your network
 Workaround for wireless interfaces as they do not allow to be enslaved to a bridge.
 
 
+**Dependencies**
+This programm needs wxpython to run:
+
+Debian:
+`sudo apt install python-wxgtk3.0`
+
+Manjaro:
+`pamac install python-wxpython`
+
+or build from source:
+https://wiki.wxpython.org/How%20to%20install%20wxPython
+
 **Usage**
 
 Open a terminal and type:
