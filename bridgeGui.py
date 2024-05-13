@@ -8,6 +8,7 @@
 #import wxversion
 # wxversion.select("2.8")
 from typing import Type
+from threading import Thread
 import wx, wx.html
 import sys
 import subprocess
@@ -96,18 +97,24 @@ class Frame(wx.Frame):
         self.loadInterfaces()
         self.selected = self.intList[0]
         choices = [x[0] for x in self.intList if len(x) > 1]
+        interfaces = wx.BoxSizer(wx.HORIZONTAL)
+        interfaces.Add(wx.StaticText(self.panel, -1, "Interface:"), 0, wx.ALL, 15)
         self.comboBox = wx.Choice(self.panel,-1, (85,15), choices=choices)
         self.comboBox.Bind(wx.EVT_CHOICE, self.onChoice)
         self.comboBox.SetSelection(0)
-        box.Add(self.comboBox, 0, wx.ALL, 10)
+        interfaces.Add(self.comboBox, 0, wx.ALL, 10)
+        box.Add(interfaces, 0, wx.ALL, 10)
+        bridge = wx.BoxSizer(wx.HORIZONTAL)
+        bridge.Add(wx.StaticText(self.panel, -1, "Bridgename:"), 0, wx.ALL, 15)
         self.bridge  = wx.TextCtrl(self.panel, -1)
-        box.Add(self.bridge, 0 , wx.ALL, 10)
+        bridge.Add(self.bridge, 0 , wx.ALL, 10)
+        box.Add(bridge, 0, wx.ALL, 10)
         self.create = wx.Button(self.panel, wx.ID_CLOSE, "Create Bridge")
         self.create.Bind(wx.EVT_BUTTON, self.OnCreate)
         box.Add(self.create, 0, wx.ALL, 10)
-        self.delete = wx.Button(self.panel, wx.ID_CLOSE, "Delete Bridges")
-        self.delete.Bind(wx.EVT_BUTTON, self.OnDeleteSelectedBridge)
-        box2.Add(self.delete, 0, wx.ALL, 10)
+        #self.delete = wx.Button(self.panel, wx.ID_CLOSE, "Delete Bridges")
+        #self.delete.Bind(wx.EVT_BUTTON, self.OnDeleteSelectedBridge)
+        #box2.Add(self.delete, 0, wx.ALL, 10)
         self.splitter.SplitVertically(self.panel, self.scrollbox)
         self.splitter.UpdateSize()
 
@@ -155,6 +162,12 @@ class Frame(wx.Frame):
 
 
     def OnCreate(self, event):
+        Thread(target=self.createBridge).start()
+
+    def createBridge(self):
+        if len(self.bridge.GetLineText(0)) == 0:
+            self.log(f"Bridgename needs to be filled out! Abort...")
+            return
         self.log(f"interface '{self.selected[0]}' with ip '{self.selected[1]}' to '{self.bridge.GetValue()}'")
         output = subprocess.getstatusoutput(f'ip route')[1].splitlines()[0]
         interface = re.findall(r'\b(?:[1-2]?[0-9]{1,2}\.){3}[1-2]?[0-9]{1,2}\b', output)[0]
@@ -165,7 +178,7 @@ class Frame(wx.Frame):
         elif proc[0] == 0:
             self.log("Creating Bridge successfull. Continue")
         else:
-            self.log("Bridge could not be created. Abort!")
+            self.log(proc[1])
             return
         proc = subprocess.getstatusoutput(f"sudo ip link set {self.selected[0]} master {self.bridge.GetLineText(0)}")
         if proc[0] == 0:
