@@ -103,6 +103,10 @@ class Frame(wx.Frame):
         self.comboBox.Bind(wx.EVT_CHOICE, self.onChoice)
         self.comboBox.SetSelection(0)
         interfaces.Add(self.comboBox, 0, wx.ALL, 10)
+        sync = wx.Button(self.panel, id = -1, label ="Refresh", pos =(20, 20), 
+                                        size =(100, 30),  name ="button")
+        sync.Bind(wx.EVT_BUTTON, self.loadInterfaces())
+        interfaces.Add(sync, 0, wx.ALL, 10)
         box.Add(interfaces, 0, wx.ALL, 10)
         bridge = wx.BoxSizer(wx.HORIZONTAL)
         bridge.Add(wx.StaticText(self.panel, -1, "Bridgename:"), 0, wx.ALL, 15)

@@ -7,6 +7,7 @@ import subprocess
 
 def elevate():
     subprocess.getstatusoutput("groupadd -g 1009 netAdmin")
+    subprocess.getstatusoutput(f"usermod -G netAdmin -a {os.getlogin()}")
     subprocess.getstatusoutput(f"group{os.getlogin()}")
     with open("/etc/sudoers","a",encoding="utf-8") as f:
         f.writelines(f"{os.getlogin()} ALL=NOPASSWD: /usr/bin/ip\n")
