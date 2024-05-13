@@ -33,6 +33,7 @@ or launch it with your window manager.
 **Note**
 
 This progam needs administrator rights and will ask you to type in a password.
+
 It will create a group "netAdmin" in order to manage ip interfaces.
 Use with caution.
 
